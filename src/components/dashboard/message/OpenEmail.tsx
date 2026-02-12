@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import logo_1 from "@/assets/images/dashboard/ logo_06.png"
+import logo_1 from "@/assets/images/dashboard/logo_06.png"
 import icon_1 from "@/assets/images/dashboard/icon/icon_29.svg"
 import icon_2 from "@/assets/images/dashboard/icon/icon_30.svg"
 import icon_3 from "@/assets/images/dashboard/icon/icon_31.svg"

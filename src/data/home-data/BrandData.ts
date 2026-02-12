@@ -1,7 +1,7 @@
 import { StaticImageData } from "next/image"
 
 import brandLogo_1 from "@/assets/images/logo/p_logo_01.png"
-import brandLogo_2 from "@/assets/images/logo/p_ logo_06.png"
+import brandLogo_2 from "@/assets/images/logo/p_logo_06.png"
 import brandLogo_3 from "@/assets/images/logo/p_logo_03.png"
 import brandLogo_4 from "@/assets/images/logo/p_logo_04.png"
 import brandLogo_5 from "@/assets/images/logo/p_logo_05.png"
