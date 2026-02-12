@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState, useEffect } from "react";
 import DashboardHeaderTwo from "@/layouts/headers/dashboard/DashboardHeaderTwo";
 import Image from "next/image";
@@ -16,9 +17,19 @@ const ProfileBody = () => {
    const [lastName, setLastName] = useState("");
    const [phoneNumber, setPhoneNumber] = useState("");
    const [about, setAbout] = useState("");
-   const token = localStorage.getItem("token"); 
+   const [token, setToken] = useState<string | null>(null); // State for token
 
    useEffect(() => {
+      // Check if window is available (client-side)
+      if (typeof window !== "undefined") {
+         const storedToken = localStorage.getItem("token");
+         setToken(storedToken); // Set token after checking it's available on client-side
+      }
+   }, []); // Empty dependency array means it runs once after component mounts
+
+   useEffect(() => {
+      if (!token) return; // Avoid fetch if token is not yet available
+
       const fetchUserData = async () => {
          try {
             const res = await fetch("http://localhost:5000/api/profile", {
@@ -44,7 +55,7 @@ const ProfileBody = () => {
       };
 
       fetchUserData();
-   }, []);
+   }, [token]); // This effect runs when `token` changes
 
    const handleSave = async () => {
       try {

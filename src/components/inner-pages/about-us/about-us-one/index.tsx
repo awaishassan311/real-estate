@@ -10,20 +10,19 @@ import FooterFour from "@/layouts/footers/FooterFour"
 import FancyBanner from "@/components/common/FancyBanner"
 
 const AboutUsOne = () => {
-   return (
-      <>
-         <HeaderOne style={true} />
-         <BreadcrumbOne title="About Agency" sub_title="About us" style={false} />
-         <BLockFeatureOne />
-         <VideoBanner />
-         <BLockFeatureFive style={true} />
-         <Feedback style={true} />
-         <AgentArea style={false} />
-         <Brand />
-         <FancyBanner style={false} />
-         <FooterFour />
-      </>
-   )
-}
-
+  return (
+    <>
+      <HeaderOne style={true} />
+      <BreadcrumbOne title="About Agency" sub_title="About us" style={false} />
+      <BLockFeatureOne />
+      <VideoBanner />
+      <BLockFeatureFive style={true} />
+      <Feedback  />
+      <AgentArea style={false} />
+      <Brand />
+      <FancyBanner style={false} />
+      <FooterFour />
+    </>
+  );
+};
 export default AboutUsOne
