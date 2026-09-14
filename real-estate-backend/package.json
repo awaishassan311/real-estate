@@ -1,14 +1,23 @@
 {
   "name": "real-estate-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "real-estate",
+    "express",
+    "postgresql",
+    "sequelize",
+    "typescript"
+  ],
+  "author": "Awais Hassan",
   "license": "ISC",
-  "description": "",
+  "description": "Express and PostgreSQL API for the Real Estate full-stack platform.",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",

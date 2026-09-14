@@ -1,224 +1,211 @@
-## 🌟 Overview
-**Real Estate** is a **Full-Stack** real estate website built with **React, Next.js, TypeScript**, and a **Node.js (Express) backend**. The platform allows users to browse, list, and manage properties seamlessly.
+# Real Estate Platform
 
-## 🎯 Features
-- 🔥 **Modern UI/UX** with smooth animations
-- 🏠 **Property listing & management**
-- 🏠 **BUY & Sell Property listing **
-- 🔒 **User authentication** (Signup/Login)
-- 📊 **Admin Dashboard** for managing users & listings
-- 📡 **Backend API** built with Express & Sequelize
-- 🎨 **Fully Responsive** on all devices
+A full-stack real estate platform built with Next.js, TypeScript, Express, Sequelize, and PostgreSQL. The project combines a polished property browsing experience with authentication, profile management, dashboard screens, and a configurable backend API.
 
-  ### Backend:
-- **Authentication & Authorization** (JWT-based login/signup)
-- **Profile Management** (Edit user details)
-- **Real Estate Listings** (Add, update, delete properties)
-- **Buying & Selling API**
-- **Database Management with PostgreSQL & Sequelize**
-  
+## Highlights
 
-## 🛠️ Tech Stack
+- Multi-page real estate experience with home, listing, detail, agency, agent, blog, pricing, and dashboard routes.
+- Property search and filtering flows for listing pages.
+- Authentication API with signup, login, JWT issuance, and protected profile routes.
+- User dashboard screens for profile, saved searches, favorites, property management, reviews, messages, and memberships.
+- PostgreSQL persistence through Sequelize and Sequelize TypeScript models.
+- Environment-based frontend and backend configuration for local development and deployment.
+- Production build, lint, and backend typecheck workflows.
 
-### 🌐 Frontend
-- **React.js** (Framework: Next.js)
-- **TypeScript**
-- **Tailwind CSS & CSS** (for styling)
-- **SCSS**
-- **Framer Motion** (for animations)
-- **Three.js**
-- **Axios** (for API calls)
+## Tech Stack
 
-### 🖥️ Backend (real-estate-backend)
-- **Node.js** (Runtime)
-- **Express.js** (Framework)
-- **Sequelize** (ORM for PostgreSQL/MySQL)
-- **JWT (JSON Web Token)** (for authentication)
-- **bcrypt.js** (for password hashing)
-- **Multer** (for handling file uploads)
+| Area | Tools |
+| --- | --- |
+| Frontend | Next.js 14, React 18, TypeScript |
+| Styling | SCSS, Bootstrap 5, Bootstrap Icons, Font Awesome |
+| State and forms | Redux Toolkit, React Redux, React Hook Form, Yup |
+| UI utilities | Fancyapps, React Slick, Chart.js, React Toastify |
+| Backend | Node.js, Express, TypeScript |
+| Database | PostgreSQL, Sequelize, Sequelize TypeScript |
+| Auth | JWT, bcrypt |
+| Contact | EmailJS browser SDK |
 
-## 📂 Project Structure
-```
-Real Estate-RealEstate-Fullstack/Real Estate-RealEstate
-├── Real Estate-RealEstate/  # React + Next.js frontend
-│   ├── .next/
-│   ├── node_modules/
-│   ├── public/
-│   └── src/
-|       ├── app/
-│       ├── components/
-│       ├── data/
-|       ├── hooks/
-│       ├── layouts/
-│       ├── models/
-│       ├── redux/
-│       ├── styles/
-│       ├── types/
-│       └── utils/
-│
-├── real-estate-backend/  # Node.js Express.js backend
-│   ├── config/
-│   ├── migrations/
-│   ├── models/
-│   ├── node_modules/
-│   ├── seeders/
-│   └── src/
-|       ├── config/
-│       ├── controllers/
-│       ├── middleware/
-|       ├── models/
-│       ├── routes/
-│       ├── models/
-│       ├── app.ts
-│       ├── custom.d.ts
-│       └── server.ts
-│
-└── README.md
+## Project Structure
 
-```
-## ⚙️ Installation & Setup
-
-### 1️⃣ Install Node.js and npm
-Ensure you have **Node.js** and **npm** installed. If not, install it from:
-👉 [Download Node.js](https://nodejs.org/)
-
-Check installation:
-```sh
-node -v
-npm -v
+```text
+.
+|-- public/                    # Static assets, fonts, images, compiled CSS
+|-- src/
+|   |-- app/                   # Next.js App Router pages and layout
+|   |-- components/            # Reusable UI, forms, listings, dashboard modules
+|   |-- data/                  # Listing, blog, menu, FAQ, agent, and project data
+|   |-- hooks/                 # Property filtering and UI hooks
+|   |-- layouts/               # Header, footer, and wrapper components
+|   |-- redux/                 # Redux store and slices
+|   |-- styles/                # Main SCSS entry
+|   |-- types/                 # Local TypeScript declarations
+|   `-- utils/                 # API client and browser utilities
+`-- real-estate-backend/
+    |-- config/                # Sequelize CLI configuration
+    |-- migrations/            # Database migrations
+    |-- models/                # Sequelize CLI model output
+    `-- src/
+        |-- config/            # Runtime database connection
+        |-- controllers/       # Auth controller
+        |-- middleware/        # JWT middleware
+        |-- models/            # Sequelize TypeScript models
+        |-- routes/            # Auth and protected API routes
+        |-- app.ts             # Express app configuration
+        `-- server.ts          # API startup entry
 ```
 
-### 2️⃣ Install PostgreSQL Database
-Download and install **PostgreSQL**:
-👉 [Download PostgreSQL](https://www.postgresql.org/download/)
+## Getting Started
 
-After installation, create a new database:
-```sh
-psql -U postgres
-CREATE DATABASE real-estate-backend;
-```
+### Prerequisites
 
-### 3️⃣ Clone the Repository
-```sh
+- Node.js 18 or newer
+- npm
+- PostgreSQL
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/awaishassan311/real-estate.git
 cd real-estate
 ```
 
-### 2️⃣ Install dependencies:
-```sh
-# Install frontend dependencies
-cd real-estate
+### 2. Configure environment variables
+
+Create the frontend environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+Create the backend environment file:
+
+```bash
+cd real-estate-backend
+cp .env.example .env
+```
+
+Update the backend `.env` file with your PostgreSQL credentials and a long random `JWT_SECRET`.
+
+### 3. Install dependencies
+
+Install frontend dependencies:
+
+```bash
 npm install
+```
 
-# Install backend dependencies
-cd ../real-estate-backend
+Install backend dependencies:
+
+```bash
+cd real-estate-backend
 npm install
 ```
 
-### 3️⃣ Setup environment variables:
-**Frontend (`.env.local`):**
-```
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
+### 4. Prepare the database
+
+Create a local PostgreSQL database that matches `DB_NAME` in `real-estate-backend/.env`.
+
+```sql
+CREATE DATABASE real_estate_backend;
 ```
 
-**Backend (`.env`):**
-```
-PORT=5000
-DATABASE_URL=postgres://user:password@localhost:5432/realestate
-JWT_SECRET=your_jwt_secret
+Run migrations from the backend directory when using Sequelize CLI:
+
+```bash
+npx sequelize-cli db:migrate
 ```
 
-### 4️⃣ Run the project:
-```sh
-# Start backend server
+For quick local experiments only, `DB_SYNC=true` can be used to let Sequelize sync models on startup.
+
+### 5. Run the app locally
+
+Start the backend API:
+
+```bash
 cd real-estate-backend
 npm run dev
+```
 
-# Start frontend
-cd ../Real Estate-frontend
+Start the frontend in another terminal:
 
-npx ts-node src/server.ts
-or
+```bash
 npm run dev
-
-```
-## 🛠️ API Endpoints
-
-| Method | Endpoint            | Description                 |
-|--------|---------------------|-----------------------------|
-| POST   | /api/signup         | User Signup                |
-| POST   | /api/login          | User Login                 |
-| GET    | /api/profile        | Get User Profile           |
-| PUT    | /api/profile/edit   | Edit User Profile          |
-| POST   | /api/property/add   | Add New Property           |
-| GET    | /api/property/list  | List Properties            |
-| POST   | /api/property/buy   | Buy Property               |
-| DELETE | /api/property/sell  | Sell Property              |
-
-#### 📌 Example API Request (Add Property):
-```sh
-curl -X POST "http://localhost:5000/api/properties" \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer YOUR_TOKEN" \
-     -d '{"title":"Luxury Villa", "price":250000, "location":"Cairo", "description":"Spacious 3-bedroom villa"}'
-
 ```
 
+Open `http://localhost:3000`.
 
-## 📡 API Endpoints
+## Environment Variables
 
-### 🏠 Authentication (Auth Routes)
-| Method | Endpoint       | Description           |
-|--------|---------------|-----------------------|
-| POST   | /signup       | Register a new user  |
-| POST   | /login        | Authenticate user    |
+### Frontend
 
-### 📄 Profile Routes
-| Method | Endpoint     | Description                |
-|--------|-------------|----------------------------|
-| GET    | /profile    | Fetch user profile        |
-| PUT    | /profile    | Update user profile       |
+| Variable | Example | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:5000/api` | Base URL for backend API requests |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | Public frontend URL used for metadata and social previews |
+| `NEXT_PUBLIC_EMAILJS_SERVICE_ID` | `service_xxxxxx` | EmailJS service ID for the contact form |
+| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | `template_xxxxxx` | EmailJS template ID for the contact form |
+| `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` | `public_key` | EmailJS public key for browser email sending |
 
-### 🏠 Properties Routes
-| Method | Endpoint        | Description                |
-|--------|----------------|----------------------------|
-| GET    | /properties    | Fetch all properties      |
-| POST   | /properties    | Add a new property        |
-| PUT    | /properties/:id| Update property details   |
-| DELETE | /properties/:id| Delete a property        |
+### Backend
 
----
+| Variable | Example | Purpose |
+| --- | --- | --- |
+| `PORT` | `5000` | API server port |
+| `NODE_ENV` | `development` | Runtime environment |
+| `CORS_ORIGIN` | `http://localhost:3000` | Allowed frontend origin |
+| `DB_HOST` | `127.0.0.1` | PostgreSQL host |
+| `DB_PORT` | `5432` | PostgreSQL port |
+| `DB_NAME` | `real_estate_backend` | PostgreSQL database name |
+| `DB_USER` | `postgres` | PostgreSQL user |
+| `DB_PASSWORD` | `password` | PostgreSQL password |
+| `JWT_SECRET` | `long-random-secret` | Secret used to sign and verify JWTs |
+| `DB_SYNC` | `false` | Enables Sequelize model sync on startup when set to `true` |
 
-## 💡 Example API Request (Update Profile)
-```js
-fetch('http://localhost:5000/api/profile', {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer YOUR_TOKEN`
-    },
-    body: JSON.stringify({
-        firstName: "John",
-        lastName: "Doe",
-        phoneNumber: "123456789",
-        about: "Real estate expert."
-    })
-})
-.then(res => res.json())
-.then(data => console.log(data))
-.catch(err => console.error(err));
+## API Overview
+
+Base URL: `http://localhost:5000/api`
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/health` | API health check |
+| `POST` | `/auth/signup` | Create a user and issue a JWT |
+| `POST` | `/auth/login` | Authenticate a user and issue a JWT |
+| `GET` | `/profile` | Get the authenticated user's profile |
+| `PUT` | `/profile` | Update the authenticated user's profile |
+
+Protected routes require an authorization header:
+
+```bash
+Authorization: Bearer YOUR_TOKEN
 ```
 
----
+## Quality Checks
 
-## ✨ Contributing
-Feel free to fork the repository and create a pull request! 😊
+Run these before opening a pull request or pushing a release branch.
 
-## 📜 License
-This project is licensed under the **MIT License**.
+Frontend:
 
-🚀 **  Real Estate** | Built with ❤️ by [Awais Hassan](https://github.com/awaishassan311)
+```bash
+npm run lint
+npm run build
+```
 
+Backend:
 
+```bash
+cd real-estate-backend
+npm run typecheck
+npm run build
+```
 
+## Engineering Notes
 
+- The frontend API client reads `NEXT_PUBLIC_API_URL`, so the same build can target local, staging, or production APIs.
+- The backend database connection and Sequelize CLI config are environment-driven.
+- JWT signing and verification use the same required `JWT_SECRET`.
+- User responses from auth endpoints return public profile fields only.
+- Generated dependencies and local environment files are intentionally excluded from Git.
+
+## Author
+
+Built by [Awais Hassan](https://github.com/awaishassan311) as a full-stack real estate platform project.

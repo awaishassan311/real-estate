@@ -6,64 +6,101 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET || "secret_key";
+const getJwtSecret = (): string => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is required");
+  }
 
-//📌 1️⃣ NEW USER  SIGNUP 
+  return process.env.JWT_SECRET;
+};
+
+const publicUser = (user: User) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+});
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password, termsAccepted } = req.body;
 
-    console.log("Received Data:", req.body); 
+    if (!name || !email || !password) {
+      res.status(400).json({ error: "Name, email, and password are required" });
+      return;
+    }
 
     if (!termsAccepted) {
       res.status(400).json({ error: "You must accept the terms and conditions" });
       return;
     }
 
-    const existingUser = await User.findOne({ where: { email } });
+    if (password.length < 8) {
+      res.status(400).json({ error: "Password must be at least 8 characters" });
+      return;
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const existingUser = await User.findOne({ where: { email: normalizedEmail } });
+
     if (existingUser) {
       res.status(400).json({ error: "User already exists" });
       return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      name: String(name).trim(),
+      email: normalizedEmail,
+      password: hashedPassword,
+      termsAccepted,
+    });
 
-    const user = await User.create({ name, email, password: hashedPassword, termsAccepted });
+    const token = jwt.sign({ id: user.id }, getJwtSecret(), { expiresIn: "1h" });
 
-    res.status(201).json({ message: "User created successfully!", user });
+    res.status(201).json({
+      message: "User created successfully",
+      token,
+      user: publicUser(user),
+    });
   } catch (error) {
-    console.error("Signup Error:", error); 
-    res.status(500).json({ error: "Error creating user", details: error });
+    console.error("Signup error:", error);
+    res.status(500).json({ error: "Unable to create user" });
   }
 };
-  
 
-// 📌 2️⃣ Login 
 export const login = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { email, password } = req.body;
-  
-      // Search new user
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        res.status(401).json({ error: "Invalid credentials" });
-        return;
-      }
-  
-      // Check password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        res.status(401).json({ error: "Invalid credentials" });
-        return;
-      }
-  
-      // ✅ Create JWT
-      const token = jwt.sign({ id: user.id }, "your_secret_key", { expiresIn: "1h" });
-  
-      res.json({ message: "Login successful!", token });
-    } catch (error) {
-      res.status(500).json({ error: "Error logging in" });
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ error: "Email and password are required" });
+      return;
     }
-  };
-  
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const user = await User.findOne({ where: { email: normalizedEmail } });
+
+    if (!user) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+
+    const token = jwt.sign({ id: user.id }, getJwtSecret(), { expiresIn: "1h" });
+
+    res.json({
+      message: "Login successful",
+      token,
+      user: publicUser(user),
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Unable to log in" });
+  }
+};

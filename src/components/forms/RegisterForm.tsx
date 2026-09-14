@@ -6,8 +6,9 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
-import axios from "axios";
+import type { AxiosError } from "axios";
 import { useRouter } from "next/navigation"; 
+import { api } from "@/utils/api";
 
 
 import OpenEye from "@/assets/images/icon/icon_68.svg";
@@ -17,6 +18,11 @@ interface FormData {
   email: string;
   password: string;
   termsAccepted: boolean;
+}
+
+interface ApiErrorResponse {
+  error?: string;
+  message?: string;
 }
 
 const RegisterForm = () => {
@@ -54,18 +60,23 @@ const RegisterForm = () => {
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/signup", data);
+      const response = await api.post("/auth/signup", data);
 
       if (response.status === 201) {
-        toast.success("Registration successful! Redirecting to login...", {
+        if (response.data?.token) {
+          localStorage.setItem("token", response.data.token);
+        }
+
+        toast.success("Registration successful!", {
           position: "top-center",
         });
 
         reset();
         setTimeout(() => router.push("/dashboard/dashboard-index"), 2000); 
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Error during registration", {
+    } catch (error) {
+      const apiError = error as AxiosError<ApiErrorResponse>;
+      toast.error(apiError.response?.data?.error || "Error during registration", {
         position: "top-center",
       });
     } finally {
