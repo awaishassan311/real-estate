@@ -25,17 +25,23 @@ const ContactForm = () => {
    const { register, handleSubmit, reset, formState: { errors }, } = useForm<FormData>({ resolver: yupResolver(schema), });
 
    const form = useRef<HTMLFormElement>(null);
+   const emailServiceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+   const emailTemplateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+   const emailPublicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
-   const sendEmail = (data: FormData) => {
+   const sendEmail = (_data: FormData) => {
+      if (!emailServiceId || !emailTemplateId || !emailPublicKey) {
+         toast.error('Contact form is not configured yet', { position: 'top-center' });
+         return;
+      }
+
       if (form.current) {
-         emailjs.sendForm('service_070078r', 'template_lojvsvb', form.current, 'mtLgOuG25NnIwGeKm')
-            .then((result) => {
-               const notify = () => toast('Message sent successfully', { position: 'top-center' });
-               notify();
+         emailjs.sendForm(emailServiceId, emailTemplateId, form.current, emailPublicKey)
+            .then(() => {
+               toast('Message sent successfully', { position: 'top-center' });
                reset();
-               console.log(result.text);
-            }, (error) => {
-               console.log(error.text);
+            }, () => {
+               toast.error('Message could not be sent. Please try again.', { position: 'top-center' });
             });
       } else {
          console.error("Form reference is null");

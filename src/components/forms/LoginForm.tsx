@@ -7,12 +7,23 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from "next/image";
+import type { AxiosError } from "axios";
+import { api } from "@/utils/api";
 
 import OpenEye from "@/assets/images/icon/icon_68.svg";
 
 interface FormData {
    email: string;
    password: string;
+}
+
+interface LoginResponse {
+   token: string;
+}
+
+interface ApiErrorResponse {
+   error?: string;
+   message?: string;
 }
 
 const LoginForm = () => {
@@ -25,26 +36,26 @@ const LoginForm = () => {
       .required();
 
    const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
+   const [loading, setLoading] = useState(false);
 
    const onSubmit = async (data: FormData) => {
+      setLoading(true);
+
       try {
-         const response = await fetch("http://localhost:5000/api/auth/login", { 
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-         });
+         const response = await api.post<LoginResponse>("/auth/login", data);
 
-         const result = await response.json();
-
-         if (response.ok) {
-            toast.success("Login successfully", { position: "top-center" });
-            reset();
-            router.push("/dashboard/dashboard-index"); 
-         } else {
-            toast.error(result.message || "Invalid email or password");
+         if (response.data?.token) {
+            localStorage.setItem("token", response.data.token);
          }
+
+         toast.success("Login successful", { position: "top-center" });
+         reset();
+         router.push("/dashboard/dashboard-index");
       } catch (error) {
-         toast.error("An error occurred. Please try again.");
+         const apiError = error as AxiosError<ApiErrorResponse>;
+         toast.error(apiError.response?.data?.error || "Invalid email or password");
+      } finally {
+         setLoading(false);
       }
    };
 
@@ -83,7 +94,9 @@ const LoginForm = () => {
                </div>
             </div>
             <div className="col-12">
-               <button type="submit" className="btn-two w-100 text-uppercase d-block mt-20">Login</button>
+               <button type="submit" className="btn-two w-100 text-uppercase d-block mt-20" disabled={loading}>
+                  {loading ? "Signing in..." : "Login"}
+               </button>
             </div>
          </div>
       </form>

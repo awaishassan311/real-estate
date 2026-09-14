@@ -1,45 +1,41 @@
-'use client'
 import "../styles/index.scss";
-import { Provider } from "react-redux";
-import store from "@/redux/store";
+import type { Metadata, Viewport } from "next";
+import { Providers } from "./providers";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  title: "Real Estate Platform",
+  description: "A full-stack real estate platform for browsing listings, managing profiles, and handling authenticated property workflows.",
+  keywords: ["real estate", "property listings", "Next.js", "TypeScript", "Express", "PostgreSQL"],
+  openGraph: {
+    title: "Real Estate Platform",
+    description: "A full-stack real estate platform built with Next.js, TypeScript, Express, Sequelize, and PostgreSQL.",
+    type: "website",
+    siteName: "Real Estate Platform",
+  },
+  icons: {
+    icon: "/favicon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0D1A1C",
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-
-  const isDev = process.env.NODE_ENV === 'development'
-
   return (
-    <html lang="en" suppressHydrationWarning={isDev}>
-      <head>
-        <meta name="keywords" content="Real estate, Property sale, Property buy" />
-        <meta name="description" content="Real Estate is a beautiful website designed for Real Estate Agency." />
-        <meta property="og:site_name" content="Real Estate" />
-        <meta property="og:url" content="https://creativegigstf.com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Real Estate React Next js" />
-        <meta name='og:image' content='images/assets/ogg.png' />
-        {/* For IE  */}
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        {/* For Resposive Device */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* For Window Tab Color */}
-        {/* Chrome, Firefox OS and Opera */}
-        <meta name="theme-color" content="#0D1A1C" />
-        {/* Windows Phone */}
-        <meta name="msapplication-navbutton-color" content="#0D1A1C" />
-        {/* iOS Safari */}
-        <meta name="apple-mobile-web-app-status-bar-style" content="#0D1A1C" />
-        <link rel="icon" href="/favicon.png" sizes="any" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" />
-      </head>
-      <body suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <div className="main-page-wrapper">
-          <Provider store={store}>
+          <Providers>
             {children}
-          </Provider>
+          </Providers>
         </div>
       </body>
     </html>

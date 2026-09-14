@@ -7,6 +7,7 @@ import UserAvatarSetting from "./UserAvatarSetting";
 import AddressAndLocation from "./AddressAndLocation";
 import Link from "next/link";
 import SocialMediaLink from "./SocialMediaLink";
+import { api } from "@/utils/api";
 
 import avatar_1 from "@/assets/images/dashboard/avatar_02.jpg";
 
@@ -32,17 +33,13 @@ const ProfileBody = () => {
 
       const fetchUserData = async () => {
          try {
-            const res = await fetch("http://localhost:5000/api/profile", {
+            const res = await api.get("/profile", {
                headers: {
                   Authorization: `Bearer ${token}`,
                },
             });
 
-            if (!res.ok) {
-               throw new Error("Failed to fetch user data");
-            }
-
-            const userData = await res.json();
+            const userData = res.data;
             setName(userData.name);
             setEmail(userData.email);
             setFirstName(userData.firstName || "");
@@ -59,24 +56,16 @@ const ProfileBody = () => {
 
    const handleSave = async () => {
       try {
-         const res = await fetch("http://localhost:5000/api/profile", {
-            method: "PUT",
+         await api.put("/profile", {
+            firstName,
+            lastName,
+            phoneNumber,
+            about,
+         }, {
             headers: {
-               "Content-Type": "application/json",
                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-               firstName,
-               lastName,
-               phoneNumber,
-               about,
-            }),
          });
-
-         if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.error || "Failed to update profile");
-         }
 
          alert("Profile updated successfully!");
       } catch (error) {

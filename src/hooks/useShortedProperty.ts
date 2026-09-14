@@ -4,15 +4,14 @@ import { useSelector } from "react-redux";
 import { selectProperties } from "@/redux/features/propertySlice";
 import listing_data from "@/data/inner-data/ListingData";
 
+const all_property = listing_data;
+
 interface DataType {
    itemsPerPage: number;
    page: string;
 }
 
 const UseShortedProperty = ({ itemsPerPage, page }: DataType) => {
-
-   let all_property = listing_data;
-
    const { properties, setProperties } = UseProperty();
    const filteredProperties = properties.filter((item) => item.page === page);
 
@@ -156,9 +155,9 @@ const UseShortedProperty = ({ itemsPerPage, page }: DataType) => {
    const [priceValue, setPriceValue] = useState([0, maxPrice]);
 
    useEffect(() => {
-      let filterPrice = all_property.filter((j) => j.price >= priceValue[0] && j.price <= priceValue[1]);
+      let filterPrice = all_property.filter((j) => j.page === page && j.price >= priceValue[0] && j.price <= priceValue[1]);
       setProperties(filterPrice)
-   }, [priceValue]);
+   }, [page, priceValue, setProperties]);
 
    const handlePriceChange = (val: number[]) => {
       setPriceValue(val)
